@@ -1,0 +1,60 @@
+# Enterprise AI Modernization Architect local development stack
+# Usage: docker compose -f docker/docker-compose.yml up --build
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: aima-db
+    environment:
+      POSTGRES_USER: aima
+      POSTGRES_PASSWORD: aima
+      POSTGRES_DB: aima
+    ports:
+      - "5432:5432"
+    volumes:
+      - aima_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aima -d aima"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - aima-net
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: aima-api
+    environment:
+      AIMA_ENVIRONMENT: local
+      AIMA_DEBUG: "true"
+      AIMA_LOG_LEVEL: INFO
+      AIMA_LOG_FORMAT: json
+      AIMA_DATABASE_URL: postgresql+psycopg://aima:aima@db:5432/aima
+      AIMA_STORAGE_BACKEND: filesystem
+      AIMA_STORAGE_PATH: /app/data/processed
+      AIMA_LLM_PROVIDER: stub
+      AIMA_SERVICE_NAME: aima-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../data:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - aima-net
+
+volumes:
+  aima_pgdata:
+
+networks:
+  aima-net:
+    driver: bridge
