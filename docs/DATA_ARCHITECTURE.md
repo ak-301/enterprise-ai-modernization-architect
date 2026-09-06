@@ -1,6 +1,6 @@
 # Data Architecture — Enterprise AI Modernization Architect
 
-**Status:** Stage 1 connectivity **IMPLEMENTED**. Stage 2 enterprise schema **IMPLEMENTED**. Ingestion and synthetic datasets are **PLANNED** (Stages 3–4).
+**Status:** Stage 1 connectivity **IMPLEMENTED**. Stage 2 enterprise schema **IMPLEMENTED**. Stage 3 synthetic Acme datasets **IMPLEMENTED** (**SIMULATED**). Ingestion into Postgres is **PLANNED** (Stage 4).
 
 ---
 
@@ -12,10 +12,10 @@ Analogy: you would not ask a consultant to plan a city move using a napkin sketc
 
 The project's map is:
 
-1. Raw files (Stage 3–4)
-2. Validated structured rows (**Stage 2 schema ready**)
+1. Raw files (**Stage 3 authored** — Acme under `data/raw/acme`)
+2. Validated structured rows (**Stage 2 schema ready**; Stage 4 loads)
 3. Graph of dependencies (Stage 5)
-4. Documents with citeable chunks (Stage 6)
+4. Documents with citeable chunks (`data/documents/acme` ready for Stage 6)
 
 Only then does AI reason.
 
@@ -43,7 +43,17 @@ AI retrieval + recommendations (cite evidence)
 Approvals + audit events
 ```
 
-**Today:** schema + ORM round-trip tests work. No CSV inventory loaded yet.
+**Today:** schema + ORM tests work; **synthetic Acme CSV/JSON/YAML + docs exist**. Not yet ingested into Postgres.
+
+---
+
+## Synthetic Acme dataset (Stage 3)
+
+Location: `data/raw/acme/` and `data/documents/acme/`.
+
+Includes applications, services, databases, APIs, infrastructure, dependencies, operational metrics, migration history, technology catalog, and intentional defects catalogued in `data_quality_defects.json` (`DQ-001`…`DQ-010`).
+
+Load helpers: `app/synthetic/acme.py` (no pipeline yet).
 
 ---
 

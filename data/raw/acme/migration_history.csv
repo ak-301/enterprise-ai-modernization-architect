@@ -1,0 +1,5 @@
+application_id,previous_migration,outcome,duration_days,cost_usd,issues
+APP-NOTIFY-001,rehost_to_cloud_vm,partial_success,45,120000,auth callback drift
+APP-REPORT-001,db_upgrade_postgres,success,20,40000,
+APP-PORTAL-001,container_pilot,failed,60,200000,session affinity + IDP coupling
+APP-PAY-001,mq_version_upgrade,success,14,75000,brief settlement delay

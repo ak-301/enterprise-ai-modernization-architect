@@ -1,0 +1,7 @@
+infrastructure_id,name,resource_type,provider,region,technology,related_application_id
+INF-REDIS-001,session-cache,cache,on_prem,dc-east,Redis 7,APP-PORTAL-001
+INF-MQ-001,payments-queue,message_queue,on_prem,dc-east,IBM MQ,APP-PAY-001
+INF-KAFKA-001,risk-events,message_queue,on_prem,dc-east,Apache Kafka,APP-RISK-001
+INF-SFTP-001,partner-file-drop,file_transfer,on_prem,dc-east,SFTP,APP-MF-001
+INF-BATCH-001,nightly-scheduler,scheduler,on_prem,dc-east,Control-M,APP-LOAN-001
+INF-OBJ-001,document-blob,object_storage,on_prem,dc-east,MinIO-compatible,APP-DOCS-001

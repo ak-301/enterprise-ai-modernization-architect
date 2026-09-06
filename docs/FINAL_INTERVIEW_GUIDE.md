@@ -2,7 +2,7 @@
 
 Speak this like a conversation. When a feature is not built yet, say **“in the design / next stages”** — never pretend.
 
-**Today’s truth:** Stage 1 foundation is **implemented**. Stages 2–20 are **planned** unless you later mark them complete.
+**Today’s truth:** Stages 1–3 are **implemented** (foundation, enterprise schema, synthetic Acme portfolio). Stages 4–20 are **planned** unless later marked complete.
 
 Related practice bank: [INTERVIEW_PREP.md](INTERVIEW_PREP.md)
 
@@ -14,7 +14,7 @@ Related practice bank: [INTERVIEW_PREP.md](INTERVIEW_PREP.md)
 
 The core idea is: don’t ask a chatbot to invent a migration plan from messy files. First turn enterprise data into a validated inventory and dependency graph, run deterministic risk/cost/wave engines, retrieve policies with RAG and cite evidence, then use a controlled AI agent to recommend options for a human architect to approve.
 
-Right now Stage 1 is complete: FastAPI, typed config, PostgreSQL connectivity, health/ready probes, structured logging, Docker packaging, and tests. The AI and data stages are designed and documented; I’m implementing them stage by stage.”
+Right now Stages 1–3 are complete: FastAPI foundation, typed enterprise schema in Postgres, and a synthetic Acme Financial Services portfolio with intentional data-quality defects. The ingestion pipeline and AI analysis stages are next.”
 
 ---
 
@@ -42,15 +42,13 @@ I chose a modular monolith because this is one decision pipeline. Microservices 
 
 ## 4. Data engineering
 
-“In the full design, raw CSV/JSON/YAML and docs enter a pipeline: parse, validate, normalize, dedupe, enrich, store. Bad rows fail loudly. We measure completeness, uniqueness, validity, consistency, and referential integrity.
-
-That stage isn’t implemented yet — but it’s non-negotiable before AI. Dirty inventory makes confident nonsense.”
+“Stage 3 already authored a synthetic Acme CSV/JSON/YAML portfolio plus policy documents, including intentional data-quality defects. Stage 4 will be the pipeline: parse, validate, normalize, dedupe, enrich, store — failing loudly and measuring completeness, uniqueness, validity, consistency, and referential integrity. Dirty inventory makes confident nonsense, so we don’t skip that step.”
 
 ---
 
 ## 5. Enterprise data model
 
-“Stage 2 will define Pydantic schemas and SQLAlchemy models for applications, services, databases, APIs, infrastructure, dependencies, evidence, recommendations, waves, costs, approvals, audit events. Alembic will version the schema.
+“Stage 2 defined Pydantic schemas and SQLAlchemy models for applications, services, databases, APIs, infrastructure, dependencies, evidence, recommendations, waves, costs, approvals, and audit events. Alembic versions the schema.
 
 The interview point: the LLM is not the database. Shared typed models are.”
 

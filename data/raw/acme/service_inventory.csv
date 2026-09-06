@@ -1,0 +1,17 @@
+service_id,application_id,service_name,language,framework,version,replicas,deployment_environment
+SVC-PORTAL-WEB,APP-PORTAL-001,portal-web,Java,Spring Boot,3.1.0,4,production
+SVC-PORTAL-BFF,APP-PORTAL-001,portal-bff,Java,Spring Boot,3.1.0,3,production
+SVC-LOAN-ORIG,APP-LOAN-001,loan-origination,Java,Spring,5.3,6,production
+SVC-LOAN-BATCH,APP-LOAN-001,loan-nightly-batch,Java,Spring Batch,4.3,1,production
+SVC-PAY-API,APP-PAY-001,payment-api,C#,ASP.NET Core,8.0,5,production
+SVC-PAY-SETTLE,APP-PAY-001,payment-settlement,C#,Worker Service,8.0,2,production
+SVC-RISK-SCORE,APP-RISK-001,risk-scoring,Python,FastAPI,0.100,3,production
+SVC-RISK-ETL,APP-RISK-001,risk-feature-etl,Python,Airflow DAG,2.7,1,production
+SVC-NOTIFY-API,APP-NOTIFY-001,notification-api,TypeScript,NestJS,10,3,production
+SVC-NOTIFY-WORKER,APP-NOTIFY-001,notification-worker,TypeScript,BullMQ,4,2,production
+SVC-REPORT-API,APP-REPORT-001,reporting-api,Python,Django,4.2,2,production
+SVC-IDP-AUTH,APP-IDP-001,idp-auth,Java,Spring Security,5.8,6,production
+SVC-DOCS-API,APP-DOCS-001,docs-api,C#,ASP.NET Core,6.0,3,production
+SVC-DWH-LOAD,APP-DWH-001,warehouse-loader,Python,Spark,3.4,1,production
+SVC-MF-BRIDGE,APP-MF-001,mainframe-bridge,Java,Custom,1.4,2,production
+SVC-ORPHAN-001,APP-MISSING-999,orphan-service,Python,Flask,2.3,1,production

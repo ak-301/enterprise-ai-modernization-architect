@@ -24,7 +24,7 @@
 | ----- | ---------------- | -------- | --------------------------- | ----------------------- |
 | 1 | Foundation | **COMPLETED** | FastAPI, PostgreSQL, Docker, structlog | Backend foundation |
 | 2 | Data Model | **COMPLETED** | Pydantic, SQLAlchemy, Alembic | Enterprise schemas |
-| 3 | Enterprise Data | PLANNED | CSV/JSON/YAML, pandas | Synthetic enterprise |
+| 3 | Enterprise Data | **COMPLETED** | CSV/JSON/YAML, pandas | Synthetic enterprise |
 | 4 | Data Pipeline | PLANNED | Python, PostgreSQL | Data engineering |
 | 5 | Dependency Graph | PLANNED | NetworkX | Graph analysis |
 | 6 | RAG | PLANNED | Embeddings, pgvector | Grounded AI |
@@ -45,7 +45,7 @@
 
 ---
 
-## Honest scope of Stage 1–2 (today)
+## Honest scope of Stages 1–3 (today)
 
 **IMPLEMENTED**
 
@@ -58,19 +58,21 @@
 - Alembic initial migration (`d5df7dcba761`)
 - Structured logging + request/trace ID middleware
 - Docker Compose + Dockerfile (files ready)
-- Unit + integration tests (**20** passing when last run)
+- **Synthetic Acme Financial Services datasets** (`data/raw/acme`, `data/documents/acme`)
+- Synthetic load helpers (`app/synthetic`)
+- Unit + integration tests (**34** passing when last run)
 - Documentation system
 
 **NOT IMPLEMENTED YET**
 
-- Synthetic enterprise CSV inventory (Stage 3)
-- Ingestion pipeline, NetworkX graph, RAG, agents
+- Ingestion pipeline into Postgres (Stage 4)
+- NetworkX graph, RAG, agents
 - Risk/cost/wave engines, Streamlit UI, CI workflows
 - Azure deployment, evaluation golden set
 
 **SIMULATED / ASSUMED / FUTURE**
 
-- Nothing simulated in runtime yet (no fake metrics dashboards)
+- Acme portfolio + metrics + docs: **SIMULATED**
 - Cost/Azure savings: **ASSUMED** later — never claim measured ROI until measured
 - Real enterprise CMDB connectors: **FUTURE**
 
@@ -106,9 +108,9 @@ Deep dive: [stages/STAGE_02.md](stages/STAGE_02.md)
 
 ## Stage 3 — Synthetic Enterprise Environment
 
-**Status: PLANNED** · Data will be **SIMULATED**
+**Status: COMPLETED** · Data is **SIMULATED**
 
-Realistic synthetic portfolio (e.g. Acme Financial Services): applications, services, databases, APIs, infrastructure, dependencies, operational metrics, intentional data-quality defects.
+Realistic synthetic portfolio (Acme Financial Services): applications, services, databases, APIs, infrastructure, dependencies, operational metrics, migration history, technology catalog, architecture/policy documents, intentional data-quality defects (`DQ-001`…`DQ-010`).
 
 Deep dive: [stages/STAGE_03.md](stages/STAGE_03.md)
 

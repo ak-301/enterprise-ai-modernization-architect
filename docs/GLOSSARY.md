@@ -92,7 +92,7 @@ Status tags in “How the project uses it”:
 
 **Simple meaning:** Finding and merging duplicate records that refer to the same thing.  
 **Technical meaning:** Entity resolution over identifiers/names.  
-**How the project uses it:** **PLANNED** Stage 4; synthetic dupes in Stage 3.  
+**How the project uses it:** **PLANNED** Stage 4; synthetic duplicates already exist in Stage 3 Acme data.  
 **Interview explanation:** “Duplicates break dependency graphs and cost estimates, so we detect them explicitly.”
 
 ---
@@ -380,7 +380,7 @@ Status tags in “How the project uses it”:
 
 **Simple meaning:** Fake but realistic data made for demos and tests.  
 **Technical meaning:** Generated datasets with known properties and intentional defects.  
-**How the project uses it:** **SIMULATED** enterprise in Stage 3 (**PLANNED**).  
+**How the project uses it:** **SIMULATED** Acme enterprise dataset (**IMPLEMENTED** Stage 3).  
 **Interview explanation:** “I always disclose that the portfolio is synthetic — the engineering is real, the customer isn’t.”
 
 ---

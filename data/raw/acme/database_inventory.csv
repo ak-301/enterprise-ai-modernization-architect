@@ -1,0 +1,12 @@
+database_id,application_id,database_name,database_type,version,size_gb,table_count,daily_growth_gb,criticality,contains_sensitive_data
+DB-PORTAL-001,APP-PORTAL-001,portal_db,PostgreSQL,14.10,420,186,1.2,high,true
+DB-LOAN-001,APP-LOAN-001,loan_db,Oracle,19c,2200,940,4.5,critical,true
+DB-PAY-001,APP-PAY-001,payments,SQL Server,2019,980,410,2.1,critical,true
+DB-RISK-001,APP-RISK-001,risk_features,Postgres,15.3,310,120,0.8,high,true
+DB-NOTIFY-001,APP-NOTIFY-001,notifications,PostgreSQL,14.9,55,42,0.2,medium,false
+DB-REPORT-001,APP-REPORT-001,reporting,postgres,13.14,740,260,1.5,medium,true
+DB-IDP-001,APP-IDP-001,identity,PostgreSQL,15.2,180,95,0.3,critical,true
+DB-DOCS-001,APP-DOCS-001,documents_meta,SQL Server,2017,640,150,0.9,high,true
+DB-DWH-001,APP-DWH-001,enterprise_dwh,SQL Server,2019,12000,2100,25.0,high,true
+DB-MF-001,APP-MF-001,core_banking_vsam,VSAM/DB2,12,8000,0,3.0,critical,true
+DB-ORPHAN-001,,unassigned_scratch,MySQL,8.0,12,8,0.01,low,false

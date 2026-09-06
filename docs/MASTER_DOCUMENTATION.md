@@ -12,7 +12,7 @@ This file is the single place to reopen months later and rebuild your mental mod
 | **ASSUMED** | Explicit model assumptions (e.g. cost rates), not measured reality |
 | **FUTURE** | Real enterprise production hardening beyond this portfolio |
 
-**Current project status:** Stages 1–2 **COMPLETED**. Stages 3–20 **PLANNED**.
+**Current project status:** Stages 1–3 **COMPLETED**. Stages 4–20 **PLANNED**.
 
 ---
 
@@ -42,7 +42,7 @@ MASTER_DOCUMENTATION.md     ← you are here (complete story)
 
 Enterprise AI Modernization Architect is a portfolio-grade **enterprise AI engineering** project. It is designed as an internal-style platform that helps architects understand a legacy application portfolio and produce an **evidence-backed**, phased cloud modernization roadmap — with **human approval**.
 
-It is **not** a flashy chatbot and **not** a production migration executor. The intended design combines data engineering, dependency graphs, deterministic risk/cost/wave engines, RAG with citeable evidence, and one controlled AI agent. **Today Stages 1–2 are implemented** (FastAPI foundation, PostgreSQL connectivity, enterprise ORM models + Pydantic schemas + Alembic, structured logging, Docker files, tests, and the documentation system).
+It is **not** a flashy chatbot and **not** a production migration executor. The intended design combines data engineering, dependency graphs, deterministic risk/cost/wave engines, RAG with citeable evidence, and one controlled AI agent. **Today Stages 1–3 are implemented** (FastAPI foundation, enterprise schema, and a **synthetic** Acme Financial Services portfolio with intentional data-quality defects). Ingestion into Postgres and AI analysis stages remain planned.
 
 ---
 
@@ -93,20 +93,20 @@ For interviews, this problem matters because it combines **data engineering + so
 9. Require human approval for high-impact decisions  
 10. Record audit trails and evaluate quality with golden scenarios  
 
-**What it does today (IMPLEMENTED):** run as a FastAPI service, load typed config, prove liveness/readiness against PostgreSQL, persist a typed enterprise schema (projects, applications, services, databases, dependencies, documents, risks, recommendations, waves, costs, approvals, audit), emit correlated structured logs, and support local packaging via Docker Compose files.
+**What it does today (IMPLEMENTED):** run as a FastAPI service, load typed config, prove liveness/readiness against PostgreSQL, persist a typed enterprise schema, author/load a **synthetic** Acme portfolio (CSV/JSON/YAML + policy docs with intentional DQ defects), emit correlated structured logs, and support local packaging via Docker Compose files.
 
 ---
 
 ## 5. The Entire Project in One Diagram
 
 ```
-Enterprise Data (SIMULATED when Stage 3 lands)
+Enterprise Data (**SIMULATED** — Acme raw files exist)
         ↓
-Discovery & Ingestion                         [PLANNED Stage 3–4]
+Discovery & Ingestion                         [PLANNED Stage 4]
         ↓
-Validation / Normalization / Quality
+Validation / Normalization / Quality          [PLANNED Stage 4]
         ↓
-Structured Asset Inventory (PostgreSQL)       [PLANNED Stage 2+]
+Structured Asset Inventory (PostgreSQL)       [schema IMPLEMENTED Stage 2]
         ↓
 Dependency Graph (NetworkX)                   [PLANNED Stage 5]
         ↓
@@ -261,7 +261,7 @@ Deeper detail: [DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) · [stages/STAGE_04.
 
 ## 11. Enterprise Data Model
 
-**Status:** **IMPLEMENTED** (Stage 2). No synthetic inventory loaded yet (Stage 3).
+**Status:** **IMPLEMENTED** (Stage 2 schema). **SIMULATED** inventory files authored (Stage 3). Not yet loaded into Postgres (Stage 4).
 
 Major entities:
 
@@ -622,7 +622,7 @@ Nothing to claim as green CI until workflows exist and run.
 |-------|------|--------|--------------|---------------|----------------|
 | 1 | Foundation | **COMPLETED** | API, config, DB path, logs, Docker files, docs | Need a real platform | Runnable service |
 | 2 | Data model | **COMPLETED** | Schemas, ORM, Alembic | Shared vocabulary | Durable entities |
-| 3 | Synthetic enterprise | PLANNED | Realistic fake portfolio + DQ issues | Credible demo/eval data | SIMULATED world |
+| 3 | Synthetic enterprise | **COMPLETED** | Realistic fake portfolio + DQ issues | Credible demo/eval data | SIMULATED world |
 | 4 | Data pipeline | PLANNED | Validate/normalize/load + quality | Dirty data kills AI | Trusted inventory |
 | 5 | Dependency graph | PLANNED | NetworkX analytics | Order is topology | Bottleneck insight |
 | 6 | RAG | PLANNED | Chunk/embed/retrieve/cite | Ground policy answers | Evidence retrieval |
@@ -786,4 +786,4 @@ Use sections 3–5 of [FINAL_INTERVIEW_GUIDE.md](FINAL_INTERVIEW_GUIDE.md) plus:
 
 ---
 
-*Last synced with repository state: Stages 1–2 COMPLETED · Stages 3–20 PLANNED · 20 tests passing.*
+*Last synced with repository state: Stages 1–3 COMPLETED · Stages 4–20 PLANNED · 34 tests passing · Acme data SIMULATED.*

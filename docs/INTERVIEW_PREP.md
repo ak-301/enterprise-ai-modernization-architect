@@ -100,7 +100,7 @@ For the continuous talk track, use [FINAL_INTERVIEW_GUIDE.md](FINAL_INTERVIEW_GU
 
 **Short:** “Completeness, uniqueness, validity, consistency, referential integrity.”
 
-**Strong:** “Stage 3 will plant intentional defects; Stage 4 will measure and report them instead of hiding them.”
+**Strong:** “Stage 3 planted intentional defects in the synthetic Acme inventory; Stage 4 will measure and report them instead of hiding them.”
 
 **Deep dive:** How do quality gates block migration waves?
 
@@ -390,7 +390,7 @@ For the continuous talk track, use [FINAL_INTERVIEW_GUIDE.md](FINAL_INTERVIEW_GU
 
 ### Is this project production-ready?
 
-**Short:** “No. It’s a portfolio system with synthetic data and Stage 1 foundation.”
+**Short:** “No. It’s a portfolio system with synthetic Acme data through Stage 3 and a platform foundation — not a production migration product.”
 
 **Strong:** “Production needs auth, secrets, PII controls, CI, eval gates, cloud hardening, real connectors. I can explain the path without overselling.”
 

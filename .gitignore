@@ -39,11 +39,14 @@ coverage.xml
 .DS_Store
 *.code-workspace
 
-# Data artifacts (keep structure via .gitkeep)
+# Data artifacts
+# Keep synthetic source inventories under data/raw/acme (Stage 3)
 data/processed/*
 !data/processed/.gitkeep
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/acme/
+!data/raw/acme/**
 
 # Docker volumes
 postgres_data/

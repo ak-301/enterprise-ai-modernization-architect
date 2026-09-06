@@ -1,0 +1,8 @@
+{
+  "external_id": "PROJ-ACME-001",
+  "name": "Acme Financial Services \u2014 FY26 Cloud Modernization",
+  "organization_name": "Acme Financial Services",
+  "industry": "financial_services",
+  "description": "SYNTHETIC enterprise portfolio for Enterprise AI Modernization Architect demos and evaluation. Not real customer data.",
+  "data_classification": "synthetic"
+}

@@ -1,0 +1,9 @@
+api_id,application_id,api_name,protocol,base_path,auth_method,average_latency_ms
+API-PORTAL-001,APP-PORTAL-001,Portal Public API,REST,/api/v1,OAuth2,180
+API-LOAN-001,APP-LOAN-001,Loan Origination API,REST,/loans/v2,mTLS,240
+API-PAY-001,APP-PAY-001,Payments API,REST,/payments/v1,mTLS,95
+API-RISK-001,APP-RISK-001,Risk Score API,REST,/risk/v1,APIKey,320
+API-NOTIFY-001,APP-NOTIFY-001,Notifications API,REST,/notify/v1,OAuth2,110
+API-IDP-001,APP-IDP-001,Identity Token API,REST,/oauth2,OAuth2,45
+API-DOCS-001,APP-DOCS-001,Document Store API,REST,/docs/v1,OAuth2,200
+API-MF-001,APP-MF-001,Mainframe Adapter API,SOAP,/mf/services,mTLS,650

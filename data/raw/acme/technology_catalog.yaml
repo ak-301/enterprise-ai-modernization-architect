@@ -1,0 +1,51 @@
+# SYNTHETIC technology catalog for Acme Financial Services
+# Not real vendor commitments — demo lifecycle labels only.
+technologies:
+  - external_id: TECH-JAVA-11
+    name: Java
+    category: runtime
+    vendor: Oracle/OpenJDK
+    lifecycle_status: maintenance
+    end_of_support: "2026-09-30"
+  - external_id: TECH-JAVA-17
+    name: Java
+    category: runtime
+    vendor: OpenJDK
+    lifecycle_status: supported
+    end_of_support: "2029-09-30"
+  - external_id: TECH-DOTNET-6
+    name: .NET
+    category: runtime
+    vendor: Microsoft
+    lifecycle_status: end_of_support
+    end_of_support: "2024-11-12"
+  - external_id: TECH-DOTNET-8
+    name: .NET
+    category: runtime
+    vendor: Microsoft
+    lifecycle_status: supported
+    end_of_support: "2026-11-10"
+  - external_id: TECH-COBOL
+    name: COBOL
+    category: runtime
+    vendor: IBM
+    lifecycle_status: legacy
+    end_of_support: null
+  - external_id: TECH-VB6
+    name: VB6
+    category: runtime
+    vendor: Microsoft
+    lifecycle_status: unsupported
+    end_of_support: "2008-04-08"
+  - external_id: TECH-ORACLE-19
+    name: Oracle Database
+    category: database
+    vendor: Oracle
+    lifecycle_status: supported
+    end_of_support: "2027-04-30"
+  - external_id: TECH-PG-14
+    name: PostgreSQL
+    category: database
+    vendor: PostgreSQL Global Development Group
+    lifecycle_status: supported
+    end_of_support: "2026-11-12"

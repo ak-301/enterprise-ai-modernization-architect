@@ -26,13 +26,14 @@ These **technical identifiers intentionally remain** so Stage 1–2 infrastructu
 |-------|------|--------|-------|
 | 1 | Foundation & Architecture | **Complete** | **IMPLEMENTED** |
 | 2 | Enterprise Data Model | **Complete** | **IMPLEMENTED** |
-| 3–20 | Synthetic data → interview packaging | Not started | **PLANNED** |
+| 3 | Synthetic Enterprise Environment | **Complete** | **SIMULATED** data authored |
+| 4–20 | Pipeline → interview packaging | Not started | **PLANNED** |
 
 | Category | Examples |
 |----------|----------|
-| **IMPLEMENTED** | FastAPI health/ready, Postgres schema, Alembic, logging, Docker files, tests |
-| **PLANNED** | Ingestion, graph, RAG, agents, Streamlit, CI, Azure deploy |
-| **SIMULATED** | Acme enterprise data (Stage 3+) |
+| **IMPLEMENTED** | FastAPI health/ready, Postgres schema, Alembic, logging, Docker files, Acme loaders, tests |
+| **PLANNED** | Ingestion pipeline, graph, RAG, agents, Streamlit, CI, Azure deploy |
+| **SIMULATED** | Acme Financial Services inventory, metrics, architecture docs |
 | **ASSUMED** | Cost model rates (Stage 9+) |
 
 ---
@@ -50,16 +51,18 @@ The LLM does **not** own truth. Structured data + deterministic engines do. The 
 
 ---
 
-## Stage 1–2 — What works today
+## Stages 1–3 — What works today
 
 - Repository layout (modular monolith)
 - Pydantic Settings (`AIMA_*` env vars)
 - FastAPI app with `/health` and `/ready`
 - PostgreSQL via Docker Compose (`pgvector/pgvector:pg16`)
 - **Enterprise ORM models + Pydantic schemas + Alembic migration**
+- **Synthetic Acme portfolio** under `data/raw/acme` + docs under `data/documents/acme`
+- Intentional data-quality defect catalog (`DQ-001`…`DQ-010`)
 - Structured JSON logging + request/trace IDs
 - Abstraction hooks for storage and LLM (local vs Azure later)
-- Unit + integration tests (**20** passing)
+- Unit + integration tests (**34** passing)
 
 ---
 

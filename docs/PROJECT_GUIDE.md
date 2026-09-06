@@ -4,7 +4,7 @@ This guide teaches the **Enterprise AI Modernization Architect** project from th
 
 You can already write code. You do **not** need to already be an enterprise architect or AI platform engineer. Every hard idea is explained in plain language.
 
-**Honesty rule:** Today **Stages 1–2** are implemented. Everything after Stage 2 is **PLANNED** unless a stage doc says COMPLETED.
+**Honesty rule:** Today **Stages 1–3** are implemented. Everything after Stage 3 is **PLANNED** unless a stage doc says COMPLETED. Stage 3 data is **SIMULATED**.
 
 Master plan: [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md)  
 Complete textbook (start here if you forgot the project): [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md)
@@ -140,12 +140,12 @@ You would never let a chatbot invent underground pipes. Same idea here.
 
 # Component guide (WHAT / WHY / HOW / TECHNOLOGY)
 
-## 1) Discovery & ingestion — PLANNED (Stage 3–4)
+## 1) Discovery & ingestion — Stage 3 data **IMPLEMENTED** (SIMULATED); pipeline **PLANNED** (Stage 4)
 
 - **WHAT:** Bring raw enterprise files into the system.
 - **WHY:** Real portfolios arrive messy; AI should not see unvalidated junk as truth.
-- **HOW:** Parse → validate → normalize → dedupe → enrich → store.
-- **TECH:** Python, pandas, Pydantic validation, PostgreSQL.
+- **HOW (today):** Synthetic Acme files authored under `data/raw/acme`. Stage 4 will parse → validate → normalize → dedupe → enrich → store.
+- **TECH:** CSV/JSON/YAML, pandas; PostgreSQL load in Stage 4.
 
 ## 2) Enterprise data model — **IMPLEMENTED** (Stage 2)
 
@@ -200,7 +200,7 @@ You would never let a chatbot invent underground pipes. Same idea here.
 
 ---
 
-# What Stages 1–2 already give you (IMPLEMENTED)
+# What Stages 1–3 already give you (IMPLEMENTED)
 
 You can already:
 
@@ -210,11 +210,12 @@ You can already:
 4. See structured logs with request IDs.
 5. Persist typed enterprise entities (projects, applications, services, dependencies, …).
 6. Version the schema with Alembic.
-7. Run tests that lock this foundation + data model.
+7. Load the **synthetic Acme** portfolio files and inspect intentional data-quality defects.
+8. Run tests that lock foundation + data model + synthetic dataset.
 
-You **cannot** yet import Acme CSV portfolios, run RAG, or get migration recommendations. That is intentional.
+You **cannot** yet run the Stage 4 ingestion pipeline into Postgres, RAG, or migration recommendations. That is intentional.
 
-Details: [stages/STAGE_01.md](stages/STAGE_01.md) · [stages/STAGE_02.md](stages/STAGE_02.md)
+Details: [stages/STAGE_01.md](stages/STAGE_01.md) · [stages/STAGE_02.md](stages/STAGE_02.md) · [stages/STAGE_03.md](stages/STAGE_03.md)
 
 ---
 
@@ -245,12 +246,12 @@ Same application settings keys; different environment values.
 
 1. Read this guide.
 2. Read [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md) and [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md).
-3. Practice Stage 1–2 aloud (30s + 2m in each stage doc).
+3. Practice Stages 1–3 aloud (30s + 2m in each stage doc).
 4. Keep [GLOSSARY.md](GLOSSARY.md) open while reading architecture docs.
 5. Rehearse the full story with [FINAL_INTERVIEW_GUIDE.md](FINAL_INTERVIEW_GUIDE.md) — mark sections as “planned” until built.
 
 ---
 
-# What Stage 3 will teach you next
+# What Stage 4 will teach you next
 
-How to create a **realistic synthetic enterprise portfolio** (Acme Financial Services) with intentional data-quality problems — so Stage 4’s pipeline has something real to validate.
+How to build a real **data engineering pipeline** that parses, validates, normalizes, and loads the Acme files — failing loudly on the intentional defects we planted in Stage 3.

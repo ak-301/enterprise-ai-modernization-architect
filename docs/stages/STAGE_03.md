@@ -2,166 +2,167 @@
 
 ## 1. Status
 
-**PLANNED** — not implemented yet. Do not describe this stage as complete in interviews until code and tests exist.
+**COMPLETED**
+
+Verified with dataset presence tests and intentional defect assertions (**34 pytest tests** in full suite when Stage 3 tests included).
 
 ## 2. What are we building?
 
-A realistic but fake Acme Financial Services portfolio with intentional data-quality issues.
+A **synthetic** Acme Financial Services portfolio: applications, services, databases, APIs, infrastructure, dependencies, operational metrics, migration history, technology catalog, architecture/policy documents, and a catalog of **intentional data-quality defects**.
 
 ## 3. Why are we building it?
 
-We need believable complexity for demos and evaluation without real customer data.
+We need believable enterprise complexity for demos and later evaluation — without real customer data. Stage 4 needs messy inputs to prove validation works.
 
 ## 4. What problem does it solve?
 
-Toy 3-service examples that don't look like enterprise work.
+Toy 3-service examples look unserious. This portfolio looks like a financial enterprise estate (Java, .NET, Python, COBOL/mainframe adapter, Postgres/SQL Server/Oracle, Redis, MQ, Kafka, batch, SFTP).
 
 ## 5. Concepts I need to understand first
 
 ### Synthetic data
 
-**Simple:** See [GLOSSARY.md](../GLOSSARY.md) for `Synthetic data` if listed; otherwise learn it while implementing this stage.
+**Simple:** Fake but realistic data made for demos/tests.  
+**Why:** Safe to share; labeled honestly.
 
 ### Data quality defect
 
-**Simple:** See [GLOSSARY.md](../GLOSSARY.md) for `Data quality defect` if listed; otherwise learn it while implementing this stage.
+**Simple:** A known problem in the data (missing owner, orphan dependency, etc.).  
+**Why:** We plant them on purpose so Stage 4 can detect them.
 
 ### Criticality
 
-**Simple:** See [GLOSSARY.md](../GLOSSARY.md) for `Criticality` if listed; otherwise learn it while implementing this stage.
+**Simple:** How important a system is to the business (`critical` / `high` / `medium` / `low`).
 
 ### Operational metrics
 
-**Simple:** See [GLOSSARY.md](../GLOSSARY.md) for `Operational metrics` if listed; otherwise learn it while implementing this stage.
-
+**Simple:** Runtime signals like CPU, latency, error rate, throughput.
 
 ## 6. Technologies used
 
-Primary stack for this stage: **Python, CSV/JSON/YAML, pandas**
+### CSV / JSON / YAML
 
-### pandas
+- **What:** Common exchange formats  
+- **Why:** Realistic enterprise export shapes  
+- **How:** Inventories under `data/raw/acme/`
 
-- **What it is:** Tabular data tool
+### pandas / PyYAML
 
-- **Why we use it:** Fits this stage's problem without overengineering.
+- **What:** Tabular and YAML loaders  
+- **Why:** Tests and future Stage 4 parsing  
+- **How:** `app/synthetic/acme.py`
 
-- **How we use it:** Author/transform inventories
+### Markdown documents
 
-### CSV/JSON/YAML
-
-- **What it is:** Exchange formats
-
-- **Why we use it:** Fits this stage's problem without overengineering.
-
-- **How we use it:** Raw inputs
-
+- **What:** Synthetic architecture/policy docs with evidence IDs (`DOC-…`)  
+- **Why:** Stage 6 RAG will cite them later  
+- **How:** `data/documents/acme/`
 
 ## 7. Architecture
 
 ```
-Inputs from earlier stages
+Synthetic authoring (Stage 3)
         ↓
-Stage 3 processing (Synthetic Enterprise Environment)
+data/raw/acme/*.csv|json|yaml
+data/documents/acme/DOC-*.md
         ↓
-Outputs consumed by later stages
+app/synthetic/acme.py (load helpers only)
+        ↓
+Stage 4 pipeline (PLANNED): validate → normalize → store
 ```
-
-See also: [PROJECT_ROADMAP.md](../PROJECT_ROADMAP.md), [ARCHITECTURE.md](../ARCHITECTURE.md).
 
 ## 8. Implementation
 
-**Not implemented.** When this stage is built, replace this section with what actually shipped (files, commands, test results). Never claim features here until they exist.
+Shipped:
+
+1. Acme portfolio (~12 apps including core 10 + duplicate/stale cases)
+2. Services, databases, APIs, infrastructure, dependencies
+3. Ops metrics + migration history + tech catalog
+4. Six architecture/policy documents with `DOC-*` IDs
+5. `data_quality_defects.json` listing DQ-001…DQ-010
+6. Loader helpers + unit tests asserting files and intentional defects
+
+**Not shipped:** ingestion into Postgres (Stage 4).
 
 ## 9. Files
 
-**Planned locations** (may shift slightly during implementation):
-
-- Application code under `app/` modules reserved for this capability
-- Data under `data/` when this stage produces datasets
-- Tests under `tests/unit`, `tests/integration`, and/or `tests/e2e`
-- This document: `docs/stages/STAGE_03.md`
+| Path | Responsibility |
+|------|----------------|
+| `data/raw/acme/*` | Raw synthetic inventories |
+| `data/documents/acme/DOC-*.md` | Citeable synthetic docs |
+| `app/synthetic/acme.py` | Path constants + loaders |
+| `tests/unit/test_synthetic_acme.py` | Dataset + defect tests |
 
 ## 10. Example
 
-A realistic example will be added when the stage is implemented. Until then, use the end-to-end story in [PROJECT_GUIDE.md](../PROJECT_GUIDE.md) and treat examples as **PLANNED**.
+```python
+from app.synthetic.acme import portfolio_summary, load_applications
+print(portfolio_summary())
+print(load_applications()[["application_id", "application_name", "owner"]].head())
+```
 
 ## 11. Failure scenarios
 
-Typical failures this stage must eventually handle:
-
-- Invalid or incomplete inputs from upstream stages
-- Conflicting metadata
-- Dependency/tool/database unavailability (where relevant)
-- Ambiguous cases that require “Insufficient evidence” rather than guessing
+- Missing raw files → `FileNotFoundError` from `assert_acme_dataset_present()`
+- Someone treats data as real → documentation/README explicitly say SYNTHETIC
 
 ## 12. How we handle failures
 
-**Planned approach:** validate inputs, return structured errors, prefer abstention over hallucination, and cover cases with tests in Stages 14–15.
+- Tests fail if required files or planted defects disappear
+- README + defect catalog make honesty explicit
 
 ## 13. Important engineering decisions
 
-Will be recorded in [ARCHITECTURE_DECISIONS.md](../ARCHITECTURE_DECISIONS.md) when choices are finalized during implementation. Design locks already made: evidence over hallucination; deterministic math in code; human approval for high impact.
+- Plant defects in data **and** document them (no hidden tricks)
+- Keep Stage 3 as data + loaders only — no silent “fixups” in code yet
+- Evidence-ready document IDs from day one for later RAG
 
 ## 14. Alternatives
 
-Possible alternatives usually include: (a) pushing more work into the LLM, (b) adding heavier infrastructure earlier, or (c) skipping the stage. We reject (a)/(b) unless a measured need appears; we reject (c) because this stage is part of the credible five-layer story.
+| Alternative | Why not |
+|-------------|---------|
+| Perfectly clean data | Wouldn’t exercise Stage 4 quality gates |
+| Real anonymized bank data | Legal/privacy risk; not appropriate here |
+| Generate randomly each run | Harder to write golden Stage 14 scenarios |
 
 ## 15. What I learned
 
-*(Fill after implementation.)* Learning goals now: understand **why** this stage exists and which glossary terms it depends on.
+Enterprise AI demos need **messy, labeled** synthetic data. Clean CSVs hide the real engineering problem.
 
 ## 16. Interview questions
 
-**Beginner**
-
-1. What is Stage 3 trying to produce?
-2. Why can't Stage 1 alone answer migration questions?
-
-**Intermediate**
-
-3. What would go wrong if we skipped this stage?
-4. Which parts should be deterministic vs LLM-driven?
-
-**Advanced**
-
-5. How would you test this stage?
-6. How does this stage change at 100× portfolio size?
+**Beginner:** What is synthetic data? Why Acme?  
+**Intermediate:** Name three intentional defects and why they matter.  
+**Advanced:** How would Stage 4 quantify completeness vs referential integrity on this set?
 
 ## 17. Interview answers
 
-1. “It produces synthetic enterprise environment capabilities that later stages consume.”
-2. “Stage 1 is only the platform foundation — health, config, database connectivity.”
-3. “We'd force the LLM to invent structure, scores, or plans without durable evidence.”
-4. “Math, validation, and policy gates stay in code; language reasoning can use the model.”
-5. “Unit tests for logic, integration tests for storage/API, and golden scenarios where AI is involved.”
-6. “Keep algorithms clear first; add caching, async workers, or service extraction only when measured.”
+- “Synthetic means fictional but realistic — labeled clearly, never sold as customer data.”
+- “We planted missing owners, duplicates, invalid versions, orphan deps/services, inconsistent tech aliases, and a stale app.”
+- “Stage 4 should emit a quality report with those dimensions and fail loud on bad rows.”
 
 ## 18. 30-second explanation
 
-“Stage 3 is Synthetic Enterprise Environment. It isn't built yet in the repo. When we implement it, it will sit in the pipeline between earlier data/platform work and later recommendation/governance stages.”
+“Stage 3 creates a synthetic Acme Financial Services portfolio with apps, services, databases, dependencies, ops metrics, and policy documents — plus intentional data-quality defects for the next pipeline stage.”
 
 ## 19. 2-minute explanation
 
-“In the full project design, Stage 3 exists because We need believable complexity for demos and evaluation without real customer data. Today the status is planned only — I'm careful not to claim it in interviews as shipped. The learning goal is to understand the problem it solves: Toy 3-service examples that don't look like enterprise work. Technologies we expect: Python, CSV/JSON/YAML, pandas.”
+“After locking the schema in Stage 2, Stage 3 authors the world we will analyze. Acme has portals, loans, payments, risk, identity, documents, warehouse, and a mainframe adapter, with Redis/MQ/Kafka/batch/SFTP style integrations. The data is deliberately imperfect: duplicates, missing owners, invalid versions, orphan references, inconsistent Postgres naming, and a stale VB6 system. We catalog those defects so Stage 4 can prove detection — we do not pretend inventory is clean.”
 
 ## 20. Deep-dive questions
 
-- How do you prevent silent data corruption at this boundary?
-- What metrics prove this stage works?
-- What is the rollback story if this stage’s output is wrong?
-- How does this interact with human approval and audit?
+- How do you version synthetic datasets as schemas evolve?
+- How do golden evaluation scenarios pin to specific defect IDs?
+- When is synthetic data not enough for stakeholder demos?
 
 ## 21. Production version
 
-Before real enterprise use: harden auth, secrets, PII handling, scalability tests, monitoring, and integration with real CMDBs/ITSM tools. This portfolio stage uses synthetic assumptions unless explicitly measured.
+Replace synthetic exports with CMDB/ServiceNow/cloud inventory connectors; keep the same schemas. Never load real PII into demo repos.
 
 ## 22. Stage summary
 
-- Status: **PLANNED**
-- Goal: A realistic but fake Acme Financial Services portfolio with intentional data-quality issues.
-- Why: We need believable complexity for demos and evaluation without real customer data.
-- Key tech: Python, CSV/JSON/YAML, pandas
-- Depends on earlier stages being solid
-- Must remain honest: not implemented until code + tests land
-- Interview focus: problem framing + where LLM must not own this work
-- Docs to update after implementation: roadmap table, guide, ADRs, interview prep
+- Status: **COMPLETED** / data is **SIMULATED**
+- Acme portfolio + docs + defect catalog
+- Loaders only — no Stage 4 pipeline yet
+- Tests lock presence of core apps and intentional defects
+- Next: Stage 4 Data Engineering Pipeline

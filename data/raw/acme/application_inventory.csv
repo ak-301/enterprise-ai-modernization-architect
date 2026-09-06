@@ -1,0 +1,13 @@
+application_id,application_name,owner,business_unit,technology,version,criticality,environment,deployment_model,age_years,notes
+APP-PORTAL-001,Customer Portal,portal-team,Digital Channels,Java,17,high,production,hybrid,8,Primary customer web channel
+APP-DUP-001,Customer Portal System,portal-team,Digital Channels,java,17,high,production,hybrid,8,INTENTIONAL_DQ: near-duplicate of APP-PORTAL-001
+APP-LOAN-001,Loan Processing,loan-ops,Lending,Java,not-a-semver,critical,production,on_prem,12,INTENTIONAL_DQ: invalid version
+APP-PAY-001,Payment Processing,payments-team,Payments,.NET,8.0,critical,production,on_prem,10,
+APP-RISK-001,Risk Analytics,risk-quant,Risk,Python,3.11,high,production,hybrid,6,
+APP-NOTIFY-001,Customer Notifications,,Marketing,Node.js,20,medium,production,cloud,4,INTENTIONAL_DQ: missing owner
+APP-REPORT-001,Reporting Platform,bi-team,Finance,Python,3.10,medium,production,on_prem,9,Uses Postgres spelling variants in related files
+APP-IDP-001,Identity Platform,iam-team,Security,Java,11,critical,production,hybrid,11,
+APP-DOCS-001,Document Management,content-team,Operations,.NET,6.0,high,production,on_prem,14,
+APP-DWH-001,Data Warehouse,data-eng,Data,Python,3.9,high,production,on_prem,7,
+APP-MF-001,Legacy Mainframe Adapter,core-banking,Core Banking,COBOL,N/A,critical,production,mainframe,28,
+APP-STALE-001,Legacy Fax Bridge,retired-ops,Operations,VB6,6.0,low,production,on_prem,22,INTENTIONAL_DQ: stale record; conflicting criticality in ops notes

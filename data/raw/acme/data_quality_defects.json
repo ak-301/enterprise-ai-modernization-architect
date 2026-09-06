@@ -1,0 +1,66 @@
+{
+  "dataset": "acme_financial_services_synthetic",
+  "disclaimer": "SYNTHETIC data only. Defects are intentional for Stage 4 pipeline testing.",
+  "defects": [
+    {
+      "id": "DQ-001",
+      "type": "uniqueness",
+      "location": "application_inventory.csv",
+      "detail": "APP-DUP-001 near-duplicate of APP-PORTAL-001 (Customer Portal)"
+    },
+    {
+      "id": "DQ-002",
+      "type": "completeness",
+      "location": "application_inventory.csv:APP-NOTIFY-001",
+      "detail": "Missing owner"
+    },
+    {
+      "id": "DQ-003",
+      "type": "validity",
+      "location": "application_inventory.csv:APP-LOAN-001",
+      "detail": "Invalid version 'not-a-semver'"
+    },
+    {
+      "id": "DQ-004",
+      "type": "consistency",
+      "location": "application_inventory.csv + database_inventory.csv",
+      "detail": "Technology/database type aliases: Java/java, PostgreSQL/Postgres/postgres"
+    },
+    {
+      "id": "DQ-005",
+      "type": "referential_integrity",
+      "location": "service_inventory.csv:SVC-ORPHAN-001",
+      "detail": "application_id APP-MISSING-999 does not exist"
+    },
+    {
+      "id": "DQ-006",
+      "type": "referential_integrity",
+      "location": "dependency_inventory.csv:DEP-ORPHAN-001",
+      "detail": "target_id APP-GHOST-404 does not exist"
+    },
+    {
+      "id": "DQ-007",
+      "type": "completeness",
+      "location": "database_inventory.csv:DB-ORPHAN-001",
+      "detail": "Missing application_id relationship"
+    },
+    {
+      "id": "DQ-008",
+      "type": "consistency",
+      "location": "dependency_inventory.csv:DEP-014/DEP-015",
+      "detail": "Circular dependency between Reporting and Data Warehouse"
+    },
+    {
+      "id": "DQ-009",
+      "type": "staleness",
+      "location": "application_inventory.csv:APP-STALE-001",
+      "detail": "Stale Legacy Fax Bridge record retained in inventory"
+    },
+    {
+      "id": "DQ-010",
+      "type": "conflicting_metadata",
+      "location": "APP-STALE-001 notes vs criticality",
+      "detail": "Record marked low criticality but described as retired/stale operational residue"
+    }
+  ]
+}
