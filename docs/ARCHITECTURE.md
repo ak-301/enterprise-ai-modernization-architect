@@ -1,6 +1,6 @@
 # Architecture — Enterprise AI Modernization Architect
 
-**Status honesty:** Architecture below describes the **target system**. Only the Stage 1 slice is **IMPLEMENTED**. Everything else is **PLANNED** unless marked otherwise.
+**Status honesty:** Architecture below describes the **target system**. Stages 1–5 are **IMPLEMENTED** (foundation, schema, synthetic Acme data, ingestion pipeline, NetworkX graph). Everything else is **PLANNED** unless marked otherwise.
 
 Related: [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) · [AI_ARCHITECTURE.md](AI_ARCHITECTURE.md) · [DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md)
 
@@ -66,8 +66,8 @@ Related: [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md) · [AI_ARCHITECTURE.md](AI_ARC
 | `app/observability` | Logging + request context | **IMPLEMENTED** (basic) |
 | `app/schemas` | Pydantic DTOs | **IMPLEMENTED** (health + enterprise domain) |
 | `app/models` | SQLAlchemy entities | **IMPLEMENTED** (Stage 2) |
-| `app/ingestion` | Pipeline | PLANNED |
-| `app/graph` | NetworkX | PLANNED |
+| `app/ingestion` | Pipeline | **IMPLEMENTED** (Stage 4) |
+| `app/graph` | NetworkX | **IMPLEMENTED** (Stage 5) |
 | `app/rag` | Chunk/embed/retrieve | PLANNED |
 | `app/analysis` / `risk` / `cost` / `migration` | Deterministic engines | PLANNED |
 | `app/agents` / `tools` | LangGraph agent + tools | PLANNED |

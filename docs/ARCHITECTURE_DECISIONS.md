@@ -128,7 +128,9 @@ Update when a new major choice is made. Do not list future tech as if already sh
 
 ---
 
-## ADR-011 — NetworkX for dependency analysis (planned)
+## ADR-011 — NetworkX for dependency analysis
+
+**Status:** **IMPLEMENTED** (Stage 5)
 
 **Decision:** Use NetworkX in-process for portfolio-scale graphs.  
 **Problem:** Need centrality and sequencing inputs.  

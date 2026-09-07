@@ -42,7 +42,7 @@ MASTER_DOCUMENTATION.md     ← you are here (complete story)
 
 Enterprise AI Modernization Architect is a portfolio-grade **enterprise AI engineering** project. It is designed as an internal-style platform that helps architects understand a legacy application portfolio and produce an **evidence-backed**, phased cloud modernization roadmap — with **human approval**.
 
-It is **not** a flashy chatbot and **not** a production migration executor. The intended design combines data engineering, dependency graphs, deterministic risk/cost/wave engines, RAG with citeable evidence, and one controlled AI agent. **Today Stages 1–3 are implemented** (FastAPI foundation, enterprise schema, and a **synthetic** Acme Financial Services portfolio with intentional data-quality defects). Ingestion into Postgres and AI analysis stages remain planned.
+It is **not** a flashy chatbot and **not** a production migration executor. The intended design combines data engineering, dependency graphs, deterministic risk/cost/wave engines, RAG with citeable evidence, and one controlled AI agent. **Today Stages 1–5 are implemented** (foundation, schema, synthetic Acme portfolio, quality-gated ingestion, and NetworkX dependency graph analysis). RAG and AI analysis stages remain planned.
 
 ---
 
@@ -93,7 +93,7 @@ For interviews, this problem matters because it combines **data engineering + so
 9. Require human approval for high-impact decisions  
 10. Record audit trails and evaluate quality with golden scenarios  
 
-**What it does today (IMPLEMENTED):** run as a FastAPI service, load typed config, prove liveness/readiness against PostgreSQL, persist a typed enterprise schema, author/load a **synthetic** Acme portfolio (CSV/JSON/YAML + policy docs with intentional DQ defects), emit correlated structured logs, and support local packaging via Docker Compose files.
+**What it does today (IMPLEMENTED):** run as a FastAPI service, load typed config, prove liveness/readiness against PostgreSQL, persist a typed enterprise schema, author/load a **synthetic** Acme portfolio (CSV/JSON/YAML + policy docs with intentional DQ defects), **ingest** that portfolio through a quality-gated pipeline into Postgres, **analyze** dependency topology with NetworkX (hubs, cycles, bottlenecks), emit correlated structured logs, and support local packaging via Docker Compose files.
 
 ---
 
@@ -102,13 +102,13 @@ For interviews, this problem matters because it combines **data engineering + so
 ```
 Enterprise Data (**SIMULATED** — Acme raw files exist)
         ↓
-Discovery & Ingestion                         [PLANNED Stage 4]
+Discovery & Ingestion                         [IMPLEMENTED Stage 4]
         ↓
-Validation / Normalization / Quality          [PLANNED Stage 4]
+Validation / Normalization / Quality          [IMPLEMENTED Stage 4]
         ↓
-Structured Asset Inventory (PostgreSQL)       [schema IMPLEMENTED Stage 2]
+Structured Asset Inventory (PostgreSQL)       [schema Stage 2 + load Stage 4]
         ↓
-Dependency Graph (NetworkX)                   [PLANNED Stage 5]
+Dependency Graph (NetworkX)                   [IMPLEMENTED Stage 5]
         ↓
 Knowledge Base / RAG (chunks + pgvector)      [PLANNED Stage 6]
         ↓
@@ -141,7 +141,7 @@ Client → FastAPI (/health, /ready) → SQLAlchemy → PostgreSQL
 
 Imagine a fictional bank (“Acme Financial Services”) with many applications. Someone dumps inventory CSVs, dependency lists, metrics, and PDF-like architecture docs into Enterprise AI Modernization Architect.
 
-**Step A — Clean the data (PLANNED):** Enterprise AI Modernization Architect does not trust raw files. It parses them, rejects invalid rows, fixes naming inconsistencies, detects duplicates, and stores clean records.
+**Step A — Clean the data (IMPLEMENTED Stage 4):** Enterprise AI Modernization Architect does not trust raw files. It parses them, rejects invalid/orphan rows, fixes naming inconsistencies, detects duplicates, and stores clean records — with a quality report that proves planted defects were found.
 
 **Step B — Build the map (PLANNED):** Applications, services, and databases become nodes. “Payment calls Identity” becomes an edge. Graph math finds central systems that are dangerous to move early.
 
@@ -197,7 +197,7 @@ Suppose Payment Processing depends on Identity and a SQL Server database, and Id
 | pytest | Tests | Lock behavior | **IMPLEMENTED** Stage 1 tests |
 | Alembic | Schema migrations | Version DB changes | **PLANNED** Stage 2 |
 | pandas | Tabular data | Synthetic datasets / pipeline | **PLANNED** Stages 3–4 |
-| NetworkX | Graph analysis | Dependencies / centrality | **PLANNED** Stage 5 |
+| NetworkX | Graph analysis | Dependencies / centrality | **IMPLEMENTED** Stage 5 |
 | Embeddings + LLM API | AI models | RAG + agent reasoning | Config stub **IMPLEMENTED**; calls **PLANNED** |
 | LangGraph | Agent workflows | Explicit state machine | **PLANNED** Stage 11 |
 | Streamlit | Internal UI | Enterprise console | **PLANNED** Stage 17 |
@@ -218,7 +218,7 @@ FastAPI modular monolith. **IMPLEMENTED:** `/health`, `/ready` (+ `/api/v1/...`)
 
 ### Business logic — PLANNED packages
 
-Reserved modules: `ingestion`, `graph`, `analysis`, `risk`, `cost`, `migration`, `agents`, `auth`, `evaluation`.
+Implemented: `ingestion` (Stage 4), `graph` (Stage 5). Reserved: `analysis`, `risk`, `cost`, `migration`, `agents`, `auth`, `evaluation`.
 
 ### Database — PARTIAL
 
@@ -238,7 +238,7 @@ Deeper detail: [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ## 10. Data Engineering
 
-**Intended pipeline (PLANNED Stage 4):**
+**Pipeline (IMPLEMENTED Stage 4):**
 
 ```
 Raw data → parse → validate → normalize → deduplicate → enrich → store
@@ -250,10 +250,12 @@ Raw data → parse → validate → normalize → deduplicate → enrich → sto
 **Terms:**
 
 - **Parse:** read CSV/JSON/YAML into records  
-- **Validate:** reject illegal values  
+- **Validate:** reject illegal values / orphan references  
 - **Normalize:** consistent names/IDs  
-- **Enrich:** derived fields  
+- **Enrich:** derived fields (`is_active`, asset types)  
 - **Store:** PostgreSQL as system of record  
+
+CLI: `python -m app.ingestion`
 
 Deeper detail: [DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) · [stages/STAGE_04.md](stages/STAGE_04.md)
 
@@ -261,7 +263,7 @@ Deeper detail: [DATA_ARCHITECTURE.md](DATA_ARCHITECTURE.md) · [stages/STAGE_04.
 
 ## 11. Enterprise Data Model
 
-**Status:** **IMPLEMENTED** (Stage 2 schema). **SIMULATED** inventory files authored (Stage 3). Not yet loaded into Postgres (Stage 4).
+**Status:** **IMPLEMENTED** (Stage 2 schema). **SIMULATED** inventory files authored (Stage 3). **LOADED** into Postgres via Stage 4 pipeline (clean rows only).
 
 Major entities:
 
@@ -287,14 +289,16 @@ Deeper detail: [stages/STAGE_02.md](stages/STAGE_02.md) · [DATA_ARCHITECTURE.md
 
 ## 12. Dependency Graph
 
-**Status:** PLANNED (Stage 5)
+**Status:** **IMPLEMENTED** (Stage 5)
 
 - **Nodes:** applications, services, databases, APIs, infrastructure  
 - **Edges:** calls, reads_from, writes_to, depends_on, publishes_to, consumes_from  
-- **Analysis:** degree, centrality, depth, cycles, bottlenecks  
+- **Analysis:** degree, betweenness centrality, depth, cycles, bottlenecks  
 - **Use:** influence migration ordering  
 
 **Analogy:** Like a subway map. Central transfer stations (high centrality) are painful to shut down early. Leaf stations are safer early moves.
+
+CLI: `python -m app.graph`
 
 Deeper detail: [stages/STAGE_05.md](stages/STAGE_05.md) · [GLOSSARY.md](GLOSSARY.md) (Dependency graph, Graph centrality)
 
@@ -624,7 +628,7 @@ Nothing to claim as green CI until workflows exist and run.
 | 2 | Data model | **COMPLETED** | Schemas, ORM, Alembic | Shared vocabulary | Durable entities |
 | 3 | Synthetic enterprise | **COMPLETED** | Realistic fake portfolio + DQ issues | Credible demo/eval data | SIMULATED world |
 | 4 | Data pipeline | PLANNED | Validate/normalize/load + quality | Dirty data kills AI | Trusted inventory |
-| 5 | Dependency graph | PLANNED | NetworkX analytics | Order is topology | Bottleneck insight |
+| 5 | Dependency graph | **COMPLETED** | NetworkX analytics | Order is topology | Bottleneck insight |
 | 6 | RAG | PLANNED | Chunk/embed/retrieve/cite | Ground policy answers | Evidence retrieval |
 | 7 | Modernization engine | PLANNED | Scores + 6R candidates | Transparent strategy | Deterministic candidates |
 | 8 | Risk | PLANNED | Multi-dimension risk | Comparable risk language | Risk records |
@@ -719,7 +723,7 @@ Before real enterprise use (**FUTURE**), you would typically add:
 
 My architecture is a modular monolith on FastAPI with PostgreSQL as system of record. The design has five layers: data engineering, graph/deterministic intelligence, grounded AI, governance, and platform engineering.
 
-Stage 1 is complete: typed configuration, health and readiness probes, structured logging with request IDs, Docker packaging, and tests. I’m implementing the rest stage by stage — schemas, synthetic Acme portfolio, ingestion with data quality, NetworkX dependencies, RAG with evidence IDs, modernization/risk/cost/wave engines, then one LangGraph agent that calls those tools and returns structured recommendations for human approval.
+Stages 1–5 are complete: typed configuration, health and readiness probes, structured logging with request IDs, Docker packaging, enterprise schema, synthetic Acme portfolio, ingestion with data-quality reporting into Postgres, and NetworkX dependency graph analysis (hubs, cycles, bottlenecks). Next I’m implementing RAG with evidence IDs, modernization/risk/cost/wave engines, then one LangGraph agent that calls those tools and returns structured recommendations for human approval.
 
 I deliberately keep math and policy in code. The LLM explains and synthesizes with citations. I won’t claim accuracy or Azure savings until I measure them. The project is synthetic and decision-support only — and that honesty is part of the engineering story.”
 

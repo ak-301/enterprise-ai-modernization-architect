@@ -140,12 +140,12 @@ You would never let a chatbot invent underground pipes. Same idea here.
 
 # Component guide (WHAT / WHY / HOW / TECHNOLOGY)
 
-## 1) Discovery & ingestion — Stage 3 data **IMPLEMENTED** (SIMULATED); pipeline **PLANNED** (Stage 4)
+## 1) Discovery & ingestion — Stage 3 data **IMPLEMENTED** (SIMULATED); pipeline **IMPLEMENTED** (Stage 4)
 
 - **WHAT:** Bring raw enterprise files into the system.
 - **WHY:** Real portfolios arrive messy; AI should not see unvalidated junk as truth.
-- **HOW (today):** Synthetic Acme files authored under `data/raw/acme`. Stage 4 will parse → validate → normalize → dedupe → enrich → store.
-- **TECH:** CSV/JSON/YAML, pandas; PostgreSQL load in Stage 4.
+- **HOW (today):** Synthetic Acme files under `data/raw/acme`. Pipeline in `app/ingestion` parses → quality-checks → normalizes → dedupes → enriches → stores clean rows; writes a quality report that detects DQ-001…DQ-010.
+- **TECH:** CSV/JSON/YAML, pandas, SQLAlchemy, PostgreSQL. CLI: `python -m app.ingestion`.
 
 ## 2) Enterprise data model — **IMPLEMENTED** (Stage 2)
 
@@ -154,12 +154,12 @@ You would never let a chatbot invent underground pipes. Same idea here.
 - **HOW:** Pydantic for API/AI contracts; SQLAlchemy for persistence; Alembic for migrations.
 - **TECH:** Pydantic v2, SQLAlchemy 2, Alembic, PostgreSQL.
 
-## 3) Dependency graph — PLANNED (Stage 5)
+## 3) Dependency graph — **IMPLEMENTED** (Stage 5)
 
 - **WHAT:** A network of nodes (apps/services/DBs) and edges (calls, reads, writes).
 - **WHY:** Migration order is a graph problem, not a chat problem.
-- **HOW:** Build graph in NetworkX; compute degree, centrality, bottlenecks.
-- **TECH:** NetworkX (+ later visualization in Streamlit).
+- **HOW:** Build graph in NetworkX from Stage 4 clean inventory; compute degree, betweenness, cycles, bottlenecks.
+- **TECH:** NetworkX. CLI: `python -m app.graph` (+ later visualization in Streamlit).
 
 ## 4) Knowledge base / RAG — PLANNED (Stage 6)
 
@@ -200,7 +200,7 @@ You would never let a chatbot invent underground pipes. Same idea here.
 
 ---
 
-# What Stages 1–3 already give you (IMPLEMENTED)
+# What Stages 1–5 already give you (IMPLEMENTED)
 
 You can already:
 
@@ -211,11 +211,14 @@ You can already:
 5. Persist typed enterprise entities (projects, applications, services, dependencies, …).
 6. Version the schema with Alembic.
 7. Load the **synthetic Acme** portfolio files and inspect intentional data-quality defects.
-8. Run tests that lock foundation + data model + synthetic dataset.
+8. Run the **ingestion pipeline** (`python -m app.ingestion`) to quality-check, normalize, and store clean inventory.
+9. Produce a quality report that detects planted defects DQ-001…DQ-010.
+10. Build a **NetworkX dependency graph** (`python -m app.graph`) with hubs, cycles, and bottlenecks.
+11. Run tests that lock foundation through graph analysis.
 
-You **cannot** yet run the Stage 4 ingestion pipeline into Postgres, RAG, or migration recommendations. That is intentional.
+You **cannot** yet run RAG or migration recommendations. That is intentional.
 
-Details: [stages/STAGE_01.md](stages/STAGE_01.md) · [stages/STAGE_02.md](stages/STAGE_02.md) · [stages/STAGE_03.md](stages/STAGE_03.md)
+Details: [stages/STAGE_01.md](stages/STAGE_01.md) · … · [stages/STAGE_05.md](stages/STAGE_05.md)
 
 ---
 
@@ -246,12 +249,12 @@ Same application settings keys; different environment values.
 
 1. Read this guide.
 2. Read [MASTER_DOCUMENTATION.md](MASTER_DOCUMENTATION.md) and [PROJECT_ROADMAP.md](PROJECT_ROADMAP.md).
-3. Practice Stages 1–3 aloud (30s + 2m in each stage doc).
+3. Practice Stages 1–5 aloud (30s + 2m in each stage doc).
 4. Keep [GLOSSARY.md](GLOSSARY.md) open while reading architecture docs.
 5. Rehearse the full story with [FINAL_INTERVIEW_GUIDE.md](FINAL_INTERVIEW_GUIDE.md) — mark sections as “planned” until built.
 
 ---
 
-# What Stage 4 will teach you next
+# What Stage 6 will teach you next
 
-How to build a real **data engineering pipeline** that parses, validates, normalizes, and loads the Acme files — failing loudly on the intentional defects we planted in Stage 3.
+How to build a **knowledge base / RAG** layer: chunk Acme architecture docs, embed, store in pgvector, retrieve with citeable evidence IDs.

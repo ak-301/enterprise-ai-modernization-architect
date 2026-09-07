@@ -27,12 +27,14 @@ These **technical identifiers intentionally remain** so Stage 1–2 infrastructu
 | 1 | Foundation & Architecture | **Complete** | **IMPLEMENTED** |
 | 2 | Enterprise Data Model | **Complete** | **IMPLEMENTED** |
 | 3 | Synthetic Enterprise Environment | **Complete** | **SIMULATED** data authored |
-| 4–20 | Pipeline → interview packaging | Not started | **PLANNED** |
+| 4 | Data Engineering Pipeline | **Complete** | **IMPLEMENTED** |
+| 5 | Dependency Graph | **Complete** | **IMPLEMENTED** |
+| 6–20 | RAG → interview packaging | Not started | **PLANNED** |
 
 | Category | Examples |
 |----------|----------|
-| **IMPLEMENTED** | FastAPI health/ready, Postgres schema, Alembic, logging, Docker files, Acme loaders, tests |
-| **PLANNED** | Ingestion pipeline, graph, RAG, agents, Streamlit, CI, Azure deploy |
+| **IMPLEMENTED** | FastAPI, Postgres schema, Alembic, logging, Docker, Acme data, ingestion, NetworkX graph, tests |
+| **PLANNED** | RAG, agents, Streamlit, CI, Azure deploy |
 | **SIMULATED** | Acme Financial Services inventory, metrics, architecture docs |
 | **ASSUMED** | Cost model rates (Stage 9+) |
 
@@ -51,7 +53,7 @@ The LLM does **not** own truth. Structured data + deterministic engines do. The 
 
 ---
 
-## Stages 1–3 — What works today
+## Stages 1–5 — What works today
 
 - Repository layout (modular monolith)
 - Pydantic Settings (`AIMA_*` env vars)
@@ -60,9 +62,12 @@ The LLM does **not** own truth. Structured data + deterministic engines do. The 
 - **Enterprise ORM models + Pydantic schemas + Alembic migration**
 - **Synthetic Acme portfolio** under `data/raw/acme` + docs under `data/documents/acme`
 - Intentional data-quality defect catalog (`DQ-001`…`DQ-010`)
+- **Ingestion pipeline** (`python -m app.ingestion`): parse → quality → normalize → dedupe → enrich → store
+- Quality report detects planted defects; clean inventory loads into Postgres
+- **Dependency graph** (`python -m app.graph`): NetworkX degree, betweenness, cycles, bottlenecks
 - Structured JSON logging + request/trace IDs
 - Abstraction hooks for storage and LLM (local vs Azure later)
-- Unit + integration tests (**34** passing)
+- Unit + integration tests (**51** passing)
 
 ---
 
@@ -110,15 +115,34 @@ docker compose -f docker/docker-compose.yml up db -d
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 4. Tests
+### 4. Ingest synthetic Acme inventory (Stage 4)
+
+With Postgres available and `.env` configured:
+
+```bash
+python -m app.ingestion
+```
+
+Dry-run (quality report only, no DB write):
+
+```bash
+python -m app.ingestion --no-persist
+```
+
+### 5. Analyze dependency graph (Stage 5)
+
+```bash
+python -m app.graph
+python -m app.graph --from-db
+```
+
+### 6. Tests
 
 ```bash
 pytest
 ```
 
-Stage 1 verification on this machine: **11 tests passed**; `/health` and `/ready` confirmed against local PostgreSQL. Full Compose stack requires Docker Desktop (not installed here).
-
----
+Full suite when Stage 5 landed: **51 tests passed**.---
 
 ## Technology choices (why)
 
@@ -130,7 +154,7 @@ Stage 1 verification on this machine: **11 tests passed**; `/health` and `/ready
 | SQLAlchemy + PostgreSQL | Persistence | Enterprise-grade relational model; pgvector later for RAG |
 | Docker Compose | Local runtime | Reproducible without Azure spend |
 | structlog | Observability base | Machine-readable logs with correlation IDs |
-| NetworkX / LangGraph / Streamlit | Later stages | Graph analysis, controlled agent, console UI |
+| NetworkX / LangGraph / Streamlit | Graph now; agent/UI later | Topology analysis; controlled agent; console |
 
 ---
 

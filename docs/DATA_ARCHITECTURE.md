@@ -1,6 +1,6 @@
 # Data Architecture — Enterprise AI Modernization Architect
 
-**Status:** Stage 1 connectivity **IMPLEMENTED**. Stage 2 enterprise schema **IMPLEMENTED**. Stage 3 synthetic Acme datasets **IMPLEMENTED** (**SIMULATED**). Ingestion into Postgres is **PLANNED** (Stage 4).
+**Status:** Stage 1 connectivity **IMPLEMENTED**. Stage 2 enterprise schema **IMPLEMENTED**. Stage 3 synthetic Acme datasets **IMPLEMENTED** (**SIMULATED**). Stage 4 ingestion pipeline **IMPLEMENTED** (quality report + Postgres load).
 
 ---
 
@@ -13,8 +13,8 @@ Analogy: you would not ask a consultant to plan a city move using a napkin sketc
 The project's map is:
 
 1. Raw files (**Stage 3 authored** — Acme under `data/raw/acme`)
-2. Validated structured rows (**Stage 2 schema ready**; Stage 4 loads)
-3. Graph of dependencies (Stage 5)
+2. Validated structured rows (**Stage 4 loads** into Stage 2 schema)
+3. Graph of dependencies (**Stage 5 IMPLEMENTED**)
 4. Documents with citeable chunks (`data/documents/acme` ready for Stage 6)
 
 Only then does AI reason.
@@ -102,23 +102,23 @@ Alembic revision: `d5df7dcba761_initial_enterprise_schema`.
 ## Referential integrity notes
 
 - Strong FKs: project → applications → services/apis/databases; waves; recommendations → approvals.
-- Dependencies use `source_asset_type` + `source_external_id` (and target equivalents). Full orphan detection is **PLANNED** in Stage 4 so heterogeneous graph endpoints stay flexible.
+- Dependencies use `source_asset_type` + `source_external_id` (and target equivalents). **Stage 4** detects orphan endpoints and rejects them from store while keeping the flexible graph reference design.
 
 ---
 
-## Data quality (PLANNED Stage 3–4)
+## Data quality (IMPLEMENTED Stages 3–4)
 
-Synthetic data will **intentionally** include problems; pipeline will measure completeness, uniqueness, validity, consistency, referential integrity.
+Stage 3 **intentionally** plants defects (DQ-001…DQ-010). Stage 4 measures completeness, uniqueness, validity, consistency, referential integrity, staleness, and conflicting metadata; writes `data/processed/acme/quality_report.json`; stores only clean inventory.
 
 ---
 
 ## Synthetic data honesty
 
-When Stage 3 lands, datasets represent a fictional company (Acme Financial Services): **SIMULATED**, not real customer data.
+Datasets represent a fictional company (Acme Financial Services): **SIMULATED**, not real customer data.
 
 ---
 
-## Stage 1–2 components
+## Stage 1–4 components
 
 | File | Role |
 |------|------|
@@ -126,6 +126,7 @@ When Stage 3 lands, datasets represent a fictional company (Acme Financial Servi
 | `app/database/base.py` | Declarative Base |
 | `app/models/*` | ORM entities |
 | `app/schemas/*` | Pydantic contracts |
+| `app/ingestion/*` | Parse / quality / normalize / store |
 | `alembic/` | Migrations |
 | `docker/docker-compose.yml` | `pgvector/pgvector:pg16` |
 

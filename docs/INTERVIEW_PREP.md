@@ -12,7 +12,7 @@ For the continuous talk track, use [FINAL_INTERVIEW_GUIDE.md](FINAL_INTERVIEW_GU
 
 **Short:** “Enterprise AI Modernization Architect is an evidence-grounded enterprise modernization advisor. It turns portfolio data into structured inventory, graphs, scores, and — eventually — a tool-using AI architect with human approval. Stage 1 is the FastAPI/Postgres foundation.”
 
-**Strong:** “I’m building a decision-support system for legacy modernization. The design rejects ‘upload files → ChatGPT → plan.’ Truth lives in Postgres; NetworkX and Python engines will handle graph math, risk, cost, and waves; an LLM agent will retrieve cited evidence and recommend; humans approve. Today Stage 1 is complete: modular monolith, config, health/ready, logging, Docker files, tests.”
+**Strong:** “I’m building a decision-support system for legacy modernization. The design rejects ‘upload files → ChatGPT → plan.’ Truth lives in Postgres; NetworkX computes dependency topology; Python engines will handle risk, cost, and waves; an LLM agent will retrieve cited evidence and recommend; humans approve. Today Stages 1–5 are complete through quality-gated ingestion and graph analysis.”
 
 **Deep dive:** What’s implemented vs planned? Why Azure-first? Why synthetic data?
 
@@ -100,7 +100,7 @@ For the continuous talk track, use [FINAL_INTERVIEW_GUIDE.md](FINAL_INTERVIEW_GU
 
 **Short:** “Completeness, uniqueness, validity, consistency, referential integrity.”
 
-**Strong:** “Stage 3 planted intentional defects in the synthetic Acme inventory; Stage 4 will measure and report them instead of hiding them.”
+**Strong:** “Stage 3 planted intentional defects in the synthetic Acme inventory; Stage 4 detects and reports them (DQ-001…DQ-010) instead of hiding them.”
 
 **Deep dive:** How do quality gates block migration waves?
 
@@ -390,7 +390,7 @@ For the continuous talk track, use [FINAL_INTERVIEW_GUIDE.md](FINAL_INTERVIEW_GU
 
 ### Is this project production-ready?
 
-**Short:** “No. It’s a portfolio system with synthetic Acme data through Stage 3 and a platform foundation — not a production migration product.”
+**Short:** “No. It’s a portfolio system with synthetic Acme data through Stage 5 graph analysis — not a production migration product.”
 
 **Strong:** “Production needs auth, secrets, PII controls, CI, eval gates, cloud hardening, real connectors. I can explain the path without overselling.”
 

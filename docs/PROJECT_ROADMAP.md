@@ -25,8 +25,8 @@
 | 1 | Foundation | **COMPLETED** | FastAPI, PostgreSQL, Docker, structlog | Backend foundation |
 | 2 | Data Model | **COMPLETED** | Pydantic, SQLAlchemy, Alembic | Enterprise schemas |
 | 3 | Enterprise Data | **COMPLETED** | CSV/JSON/YAML, pandas | Synthetic enterprise |
-| 4 | Data Pipeline | PLANNED | Python, PostgreSQL | Data engineering |
-| 5 | Dependency Graph | PLANNED | NetworkX | Graph analysis |
+| 4 | Data Pipeline | **COMPLETED** | Python, PostgreSQL | Data engineering |
+| 5 | Dependency Graph | **COMPLETED** | NetworkX | Graph analysis |
 | 6 | RAG | PLANNED | Embeddings, pgvector | Grounded AI |
 | 7 | Modernization | PLANNED | Python rules + scoring | Decision engine |
 | 8 | Risk | PLANNED | Python | Risk analysis |
@@ -45,7 +45,7 @@
 
 ---
 
-## Honest scope of Stages 1–3 (today)
+## Honest scope of Stages 1–5 (today)
 
 **IMPLEMENTED**
 
@@ -60,13 +60,15 @@
 - Docker Compose + Dockerfile (files ready)
 - **Synthetic Acme Financial Services datasets** (`data/raw/acme`, `data/documents/acme`)
 - Synthetic load helpers (`app/synthetic`)
-- Unit + integration tests (**34** passing when last run)
+- **Data engineering pipeline** (`app/ingestion`): parse → quality → normalize → dedupe → enrich → store
+- Quality report detecting planted defects **DQ-001…DQ-010**
+- **Dependency graph** (`app/graph`): NetworkX centrality, cycles, bottlenecks
+- Unit + integration tests (see latest pytest count in README)
 - Documentation system
 
 **NOT IMPLEMENTED YET**
 
-- Ingestion pipeline into Postgres (Stage 4)
-- NetworkX graph, RAG, agents
+- RAG, agents
 - Risk/cost/wave engines, Streamlit UI, CI workflows
 - Azure deployment, evaluation golden set
 
@@ -118,11 +120,13 @@ Deep dive: [stages/STAGE_03.md](stages/STAGE_03.md)
 
 ## Stage 4 — Data Engineering Pipeline
 
-**Status: PLANNED**
+**Status: COMPLETED**
 
 ```
 raw → parse → validate → normalize → deduplicate → enrich → store + quality report
 ```
+
+Detects planted Acme defects DQ-001…DQ-010; loads clean inventory into PostgreSQL.
 
 Deep dive: [stages/STAGE_04.md](stages/STAGE_04.md)
 
@@ -130,9 +134,9 @@ Deep dive: [stages/STAGE_04.md](stages/STAGE_04.md)
 
 ## Stage 5 — Dependency Graph
 
-**Status: PLANNED**
+**Status: COMPLETED**
 
-NetworkX nodes/edges · centrality · critical dependencies · migration bottlenecks
+NetworkX nodes/edges · centrality · critical dependencies · migration bottlenecks · cycle detection
 
 Deep dive: [stages/STAGE_05.md](stages/STAGE_05.md)
 

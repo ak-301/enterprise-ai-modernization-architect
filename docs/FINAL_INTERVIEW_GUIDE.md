@@ -2,7 +2,7 @@
 
 Speak this like a conversation. When a feature is not built yet, say **“in the design / next stages”** — never pretend.
 
-**Today’s truth:** Stages 1–3 are **implemented** (foundation, enterprise schema, synthetic Acme portfolio). Stages 4–20 are **planned** unless later marked complete.
+**Today’s truth:** Stages 1–5 are **implemented** (foundation, schema, synthetic Acme portfolio, ingestion + quality pipeline, NetworkX dependency graph). Stages 6–20 are **planned** unless later marked complete.
 
 Related practice bank: [INTERVIEW_PREP.md](INTERVIEW_PREP.md)
 
@@ -14,7 +14,7 @@ Related practice bank: [INTERVIEW_PREP.md](INTERVIEW_PREP.md)
 
 The core idea is: don’t ask a chatbot to invent a migration plan from messy files. First turn enterprise data into a validated inventory and dependency graph, run deterministic risk/cost/wave engines, retrieve policies with RAG and cite evidence, then use a controlled AI agent to recommend options for a human architect to approve.
 
-Right now Stages 1–3 are complete: FastAPI foundation, typed enterprise schema in Postgres, and a synthetic Acme Financial Services portfolio with intentional data-quality defects. The ingestion pipeline and AI analysis stages are next.”
+Right now Stages 1–5 are complete: FastAPI foundation, typed enterprise schema, synthetic Acme portfolio with intentional data-quality defects, a quality-gated ingestion pipeline into Postgres, and a NetworkX dependency graph that surfaces hubs, cycles, and migration bottlenecks. RAG and AI recommendation stages are next.”
 
 ---
 
@@ -42,7 +42,7 @@ I chose a modular monolith because this is one decision pipeline. Microservices 
 
 ## 4. Data engineering
 
-“Stage 3 already authored a synthetic Acme CSV/JSON/YAML portfolio plus policy documents, including intentional data-quality defects. Stage 4 will be the pipeline: parse, validate, normalize, dedupe, enrich, store — failing loudly and measuring completeness, uniqueness, validity, consistency, and referential integrity. Dirty inventory makes confident nonsense, so we don’t skip that step.”
+“Stage 4 is the gate. We parse the Acme CSV/JSON/YAML portfolio, measure completeness, uniqueness, validity, consistency, and referential integrity, normalize aliases like Postgres→PostgreSQL, reject orphans and near-duplicates, enrich stale systems as inactive, load clean rows into Postgres, and write a quality report that detects the planted defects DQ-001 through DQ-010. Dirty inventory never silently becomes AI truth.”
 
 ---
 
@@ -56,9 +56,7 @@ The interview point: the LLM is not the database. Shared typed models are.”
 
 ## 6. Dependency graph
 
-“We’ll build a NetworkX graph — nodes for apps/services/DBs/APIs/infra, edges for calls, reads, writes, publishes, consumes. Then compute degree, centrality, depth, cycles, bottlenecks.
-
-Migration sequencing is a graph problem. I won’t ask a model to ‘just understand dependencies.’”
+“Stage 5 builds a NetworkX digraph — nodes for apps/services/DBs/APIs/infra, edges for calls, reads, writes, publishes, consumes. We compute degree, betweenness, depth, cycles, and bottlenecks. Identity Platform shows up as a hub; Reporting and Data Warehouse form a cycle. Migration sequencing is a graph problem — I won’t ask a model to ‘just understand dependencies.’”
 
 ---
 

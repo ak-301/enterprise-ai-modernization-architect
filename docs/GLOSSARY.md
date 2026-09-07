@@ -65,7 +65,7 @@ Status tags in “How the project uses it”:
 
 **Simple meaning:** A series of steps that take messy inputs and produce clean stored data.  
 **Technical meaning:** Extract-Transform-Load (or ELT) processing with validation.  
-**How the project uses it:** **PLANNED** Stage 4 (`raw→parse→validate→normalize→…`).  
+**How the project uses it:** **IMPLEMENTED** Stage 4 (`raw→parse→validate→normalize→dedupe→enrich→store` + quality report).  
 **Interview explanation:** “Our pipeline fails loudly on bad rows instead of silently poisoning AI.”
 
 ---
@@ -74,7 +74,7 @@ Status tags in “How the project uses it”:
 
 **Simple meaning:** The agreed shape of data — which fields exist and what types they are.  
 **Technical meaning:** Structural contract (Pydantic models, DB DDL, JSON Schema).  
-**How the project uses it:** Health schemas **IMPLEMENTED**; enterprise schemas **PLANNED**.  
+**How the project uses it:** Health schemas **IMPLEMENTED**; enterprise schemas **IMPLEMENTED** (Stage 2).  
 **Interview explanation:** “Shared schemas keep API, DB, and AI outputs speaking one language.”
 
 ---
@@ -83,7 +83,7 @@ Status tags in “How the project uses it”:
 
 **Simple meaning:** Cleaning and organizing data so the same fact isn’t stored messily in many conflicting ways.  
 **Technical meaning:** Relational design + value standardization (e.g. technology aliases).  
-**How the project uses it:** **PLANNED** Stage 4.  
+**How the project uses it:** **IMPLEMENTED** Stage 4 (e.g. Postgres/PostgreSQL aliases).  
 **Interview explanation:** “Normalization turns inconsistent inventory into comparable assets.”
 
 ---
@@ -92,7 +92,7 @@ Status tags in “How the project uses it”:
 
 **Simple meaning:** Finding and merging duplicate records that refer to the same thing.  
 **Technical meaning:** Entity resolution over identifiers/names.  
-**How the project uses it:** **PLANNED** Stage 4; synthetic duplicates already exist in Stage 3 Acme data.  
+**How the project uses it:** **IMPLEMENTED** Stage 4; synthetic duplicates authored in Stage 3 Acme data.  
 **Interview explanation:** “Duplicates break dependency graphs and cost estimates, so we detect them explicitly.”
 
 ---
@@ -218,7 +218,7 @@ Status tags in “How the project uses it”:
 
 **Simple meaning:** A map of what depends on what.  
 **Technical meaning:** Directed graph of assets and dependency edges.  
-**How the project uses it:** NetworkX **PLANNED** Stage 5.  
+**How the project uses it:** NetworkX **IMPLEMENTED** Stage 5 (`app/graph`).  
 **Interview explanation:** “Migration sequencing is a graph problem before it’s an LLM problem.”
 
 ---
@@ -227,7 +227,7 @@ Status tags in “How the project uses it”:
 
 **Simple meaning:** A score for how “central” or influential a node is in the network.  
 **Technical meaning:** Metrics like degree/betweenness/closeness centrality.  
-**How the project uses it:** **PLANNED** to flag bottlenecks.  
+**How the project uses it:** **IMPLEMENTED** Stage 5 — betweenness + in-degree hubs/bottlenecks.  
 **Interview explanation:** “High-centrality systems are often migration bottlenecks.”
 
 ---

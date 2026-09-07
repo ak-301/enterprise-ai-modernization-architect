@@ -2,11 +2,13 @@
 
 ## 1. Status
 
-**PLANNED** — not implemented yet. Do not describe this stage as complete in interviews until code and tests exist.
+**COMPLETED**
+
+Verified with unit + integration tests. Full suite expected **~51 pytest tests** when Stage 5 landed. NetworkX analyzes cleaned Acme inventory (file path or Postgres).
 
 ## 2. What are we building?
 
-Build a graph of assets and dependency edges; compute centrality and bottlenecks.
+A **directed dependency graph** of portfolio assets with degree, betweenness centrality, depth, cycles, hubs, and migration bottlenecks.
 
 ## 3. Why are we building it?
 
@@ -14,127 +16,161 @@ Migration order depends on topology, not alphabetical sorting.
 
 ## 4. What problem does it solve?
 
-LLM guessing dependencies instead of computing them.
+LLM guessing dependencies instead of computing them from durable inventory edges.
 
 ## 5. Concepts I need to understand first
 
-### Node/edge
+### Node / edge
 
-**Simple:** See [GLOSSARY.md](../GLOSSARY.md) for `Node/edge` if listed; otherwise learn it while implementing this stage.
+**Simple:** A node is an asset (app, service, DB, API, infra). An edge is a dependency (calls, reads, writes, …).  
+**Interview:** Edges come from Stage 4 clean inventory — not from the model inventing links.
 
 ### Degree
 
-**Simple:** See [GLOSSARY.md](../GLOSSARY.md) for `Degree` if listed; otherwise learn it while implementing this stage.
+**Simple:** How many connections a node has.  
+**Interview:** High **in-degree** means many systems depend on you (hard to move early).
 
-### Centrality
+### Centrality (betweenness)
 
-**Simple:** See [GLOSSARY.md](../GLOSSARY.md) for `Centrality` if listed; otherwise learn it while implementing this stage.
+**Simple:** How often a node sits on shortest paths between others.  
+**Interview:** High betweenness ≈ migration bottleneck / blast-radius risk.
 
 ### Cycle
 
-**Simple:** See [GLOSSARY.md](../GLOSSARY.md) for `Cycle` if listed; otherwise learn it while implementing this stage.
+**Simple:** A loop in the graph (A depends on B depends on A).  
+**Interview:** Acme Reporting ↔ Data Warehouse is an intentional cycle flagged in Stage 3/4 and detected here.
 
+### Depth
+
+**Simple:** How far a node sits from graph roots on the condensation DAG.  
+**Interview:** Helps sequence waves later (Stage 10).
 
 ## 6. Technologies used
 
-Primary stack for this stage: **NetworkX**
-
 ### NetworkX
 
-- **What it is:** Graph library
-
-- **Why we use it:** Fits this stage's problem without overengineering.
-
-- **How we use it:** In-process analysis
-
+- **What:** In-process Python graph library  
+- **Why:** Enough for portfolio-scale synthetic data; deterministic; easy to test  
+- **How:** `app/graph` builds a `DiGraph`, computes metrics, exports JSON
 
 ## 7. Architecture
 
 ```
-Inputs from earlier stages
+Stage 4 clean inventory (files or PostgreSQL)
         ↓
-Stage 5 processing (Dependency Graph)
+nodes (type:external_id) + directed edges
         ↓
-Outputs consumed by later stages
+NetworkX DiGraph
+        ↓
+degree · betweenness · depth · cycles · hubs · bottlenecks
+        ↓
+GraphAnalysis (+ optional data/processed/acme/dependency_graph.json)
 ```
 
-See also: [PROJECT_ROADMAP.md](../PROJECT_ROADMAP.md), [ARCHITECTURE.md](../ARCHITECTURE.md).
+CLI: `python -m app.graph` (files) or `python -m app.graph --from-db`.
 
 ## 8. Implementation
 
-**Not implemented.** When this stage is built, replace this section with what actually shipped (files, commands, test results). Never claim features here until they exist.
+Shipped:
+
+1. `app/graph` package (builder, analysis, pipeline, CLI)
+2. Build from cleaned Acme portfolio (reuses Stage 4 transforms) or from DB
+3. Metrics: in/out/degree, betweenness, condensation depth
+4. Application-level cycle detection (REPORT ↔ DWH)
+5. Bottleneck / hub ranking; critical edge list
+6. Unit tests + integration test (ingest then analyze from Postgres)
+
+**Not shipped:** Neo4j, Streamlit visualization, wave planner (Stage 10).
 
 ## 9. Files
 
-**Planned locations** (may shift slightly during implementation):
-
-- Application code under `app/` modules reserved for this capability
-- Data under `data/` when this stage produces datasets
-- Tests under `tests/unit`, `tests/integration`, and/or `tests/e2e`
-- This document: `docs/stages/STAGE_05.md`
+| Path | Responsibility |
+|------|----------------|
+| `app/graph/builder.py` | Build DiGraph from portfolio or DB |
+| `app/graph/analysis.py` | Centrality, cycles, bottlenecks |
+| `app/graph/pipeline.py` | Orchestration + JSON export |
+| `app/graph/__main__.py` | CLI |
+| `tests/unit/test_dependency_graph.py` | Graph unit tests |
+| `tests/integration/test_dependency_graph_db.py` | DB-backed analysis |
 
 ## 10. Example
 
-A realistic example will be added when the stage is implemented. Until then, use the end-to-end story in [PROJECT_GUIDE.md](../PROJECT_GUIDE.md) and treat examples as **PLANNED**.
+```python
+from app.graph import analyze_acme_graph, graph_summary
+
+analysis = analyze_acme_graph(write_report=True)
+print(graph_summary(analysis))
+# Identity Platform shows high in-degree; REPORT↔DWH appears in cycles
+```
+
+```bash
+python -m app.graph
+python -m app.graph --from-db --project-id PROJ-ACME-001
+```
 
 ## 11. Failure scenarios
 
-Typical failures this stage must eventually handle:
-
-- Invalid or incomplete inputs from upstream stages
-- Conflicting metadata
-- Dependency/tool/database unavailability (where relevant)
-- Ambiguous cases that require “Insufficient evidence” rather than guessing
+- Project missing in DB → `ValueError`  
+- Empty inventory → empty analysis (0 nodes)  
+- Cycles → reported, not “fixed” by inventing edges  
+- Orphan deps already rejected in Stage 4 — not present in clean graph
 
 ## 12. How we handle failures
 
-**Planned approach:** validate inputs, return structured errors, prefer abstention over hallucination, and cover cases with tests in Stages 14–15.
+Prefer computed topology from stored edges; never invent missing dependencies. Cycles are first-class findings for humans / later wave rules.
 
 ## 13. Important engineering decisions
 
-Will be recorded in [ARCHITECTURE_DECISIONS.md](../ARCHITECTURE_DECISIONS.md) when choices are finalized during implementation. Design locks already made: evidence over hallucination; deterministic math in code; human approval for high impact.
+- Edge direction: source → target means source depends on / calls target (matches inventory)  
+- Node keys: `asset_type:external_id` for heterogeneous graph  
+- NetworkX in-process (ADR-011) — no graph DB yet  
+- Depth via strongly connected component condensation so cycles don’t break topological depth
 
 ## 14. Alternatives
 
-Possible alternatives usually include: (a) pushing more work into the LLM, (b) adding heavier infrastructure earlier, or (c) skipping the stage. We reject (a)/(b) unless a measured need appears; we reject (c) because this stage is part of the credible five-layer story.
+| Alternative | Why rejected (for now) |
+|-------------|------------------------|
+| Neo4j day one | Overkill for synthetic portfolio |
+| Ask LLM for dependencies | Non-deterministic; not auditable |
+| Skip graph stage | Waves and risk need topology |
 
 ## 15. What I learned
 
-*(Fill after implementation.)* Learning goals now: understand **why** this stage exists and which glossary terms it depends on.
+Dependency math belongs in code. Centrality and cycles are interview-defensible explanations for “migrate IDP late” and “Reporting/DWH are coupled.”
 
 ## 16. Interview questions
 
 **Beginner**
 
-1. What is Stage 5 trying to produce?
-2. Why can't Stage 1 alone answer migration questions?
+1. What does Stage 5 produce?
+2. Why not let the LLM list dependencies?
 
 **Intermediate**
 
-3. What would go wrong if we skipped this stage?
-4. Which parts should be deterministic vs LLM-driven?
+3. What does high in-degree mean for migration order?
+4. How do you handle cycles?
 
 **Advanced**
 
-5. How would you test this stage?
-6. How does this stage change at 100× portfolio size?
+5. When would you move from NetworkX to a graph database?
+6. How does this feed wave planning?
 
 ## 17. Interview answers
 
-1. “It produces dependency graph capabilities that later stages consume.”
-2. “Stage 1 is only the platform foundation — health, config, database connectivity.”
-3. “We'd force the LLM to invent structure, scores, or plans without durable evidence.”
-4. “Math, validation, and policy gates stay in code; language reasoning can use the model.”
-5. “Unit tests for logic, integration tests for storage/API, and golden scenarios where AI is involved.”
-6. “Keep algorithms clear first; add caching, async workers, or service extraction only when measured.”
+1. “A NetworkX graph plus metrics: hubs, bottlenecks, cycles, critical edges.”
+2. “Dependencies are facts in inventory; guessing them is how plans invent coupling.”
+3. “Many systems depend on you — moving you early cascades failures.”
+4. “Detect and report them; compute depth on the condensation DAG.”
+5. “When measured scale or multi-tenant query patterns outgrow in-process graphs.”
+6. “Hubs/cycles become constraints for Stage 10 migration waves.”
 
 ## 18. 30-second explanation
 
-“Stage 5 is Dependency Graph. It isn't built yet in the repo. When we implement it, it will sit in the pipeline between earlier data/platform work and later recommendation/governance stages.”
+“Stage 5 builds a NetworkX dependency graph from the clean Acme inventory. We compute degree and betweenness to find hubs and bottlenecks, detect cycles like Reporting ↔ Data Warehouse, and use that topology for later migration sequencing — not LLM guesswork.”
 
 ## 19. 2-minute explanation
 
-“In the full project design, Stage 5 exists because Migration order depends on topology, not alphabetical sorting. Today the status is planned only — I'm careful not to claim it in interviews as shipped. The learning goal is to understand the problem it solves: LLM guessing dependencies instead of computing them. Technologies we expect: NetworkX.”
+“After Stage 4 loads validated assets and edges, Stage 5 turns them into a directed graph. Nodes are typed by asset class with business IDs; edges keep calls/reads/writes semantics. NetworkX gives us in-degree hubs like Identity Platform, betweenness bottlenecks, and cycles. That map is what makes migration order a graph problem: you don’t shut down a central transfer station first. Results export to JSON for demos and feed Stage 10 waves later.”
 
 ## 20. Deep-dive questions
 
@@ -145,15 +181,12 @@ Possible alternatives usually include: (a) pushing more work into the LLM, (b) a
 
 ## 21. Production version
 
-Before real enterprise use: harden auth, secrets, PII handling, scalability tests, monitoring, and integration with real CMDBs/ITSM tools. This portfolio stage uses synthetic assumptions unless explicitly measured.
+At real scale: snapshot graphs per analysis run, persist metrics tables, optional graph DB, auth on project scope, and visualization. This stage uses synthetic Acme data.
 
 ## 22. Stage summary
 
-- Status: **PLANNED**
-- Goal: Build a graph of assets and dependency edges; compute centrality and bottlenecks.
-- Why: Migration order depends on topology, not alphabetical sorting.
+- Status: **COMPLETED**
+- Goal: Graph + centrality + bottlenecks + cycles
+- Why: Migration order is topology
 - Key tech: NetworkX
-- Depends on earlier stages being solid
-- Must remain honest: not implemented until code + tests land
-- Interview focus: problem framing + where LLM must not own this work
-- Docs to update after implementation: roadmap table, guide, ADRs, interview prep
+- Next: Stage 6 Knowledge Base & RAG
