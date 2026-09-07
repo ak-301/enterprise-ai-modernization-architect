@@ -68,7 +68,7 @@ data/documents/acme/DOC-*.md
         ↓
 app/synthetic/acme.py (load helpers only)
         ↓
-Stage 4 pipeline (PLANNED): validate → normalize → store
+Stage 4 pipeline (IMPLEMENTED): validate → normalize → store
 ```
 
 ## 8. Implementation
@@ -82,7 +82,7 @@ Shipped:
 5. `data_quality_defects.json` listing DQ-001…DQ-010
 6. Loader helpers + unit tests asserting files and intentional defects
 
-**Not shipped:** ingestion into Postgres (Stage 4).
+**Ingestion into Postgres:** see Stage 4 (`app/ingestion`).
 
 ## 9. Files
 
@@ -163,6 +163,6 @@ Replace synthetic exports with CMDB/ServiceNow/cloud inventory connectors; keep 
 
 - Status: **COMPLETED** / data is **SIMULATED**
 - Acme portfolio + docs + defect catalog
-- Loaders only — no Stage 4 pipeline yet
+- Loaders only for Stage 3 — Stage 4 owns the pipeline
 - Tests lock presence of core apps and intentional defects
-- Next: Stage 4 Data Engineering Pipeline
+- Next after Stage 4: Stage 5 Dependency Graph
